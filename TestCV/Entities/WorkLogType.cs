@@ -6,7 +6,9 @@ namespace TestCV
 {
     public enum WorkLogType
     {
-        Work,
-        Vacation
+        Work, // Рабочий 
+        Vacation, //Отпуск
+        Sick, // Больничный
+        Own // За свой счёт
     }
 }

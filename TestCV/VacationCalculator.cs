@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TestCV.Interfaces;
 
 namespace TestCV
@@ -8,21 +6,32 @@ namespace TestCV
     public class VacationCalculator : IVacationDaysCalculator
     {
         IEmployeeRepository _employeeRepository;
-        IVacationReository _vacationReository;
+        IVacationRepository _vacationRepository;
 
-        public VacationCalculator(IEmployeeRepository employeeRepository, IVacationReository vacationReository)
+        public VacationCalculator(IEmployeeRepository employeeRepository, IVacationRepository vacationReository)
         {
             _employeeRepository = employeeRepository;
-            _vacationReository = vacationReository;
+            _vacationRepository = vacationReository;
         }
+
+        //public double CalculateDay(Guid employeeId, DateTime beginDate, DateTime calculationDate)
+        //{
+        //    var emp = _employeeRepository.GetEmployee(employeeId);
+        //    int workingDaysForPeriod = _vacationRepository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.Work);
+
+        //    return workingDaysForPeriod;
+        //}
 
         public double CalculateDay(Guid employeeId, DateTime beginDate, DateTime calculationDate)
         {
             var emp = _employeeRepository.GetEmployee(employeeId);
-            int workingDaysForPeriod = _vacationReository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.Work);
+            var totalDays = _vacationRepository.CalculateTotalDays(employeeId);
+            int workingDaysForPeriod = _vacationRepository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.Work);
 
-            return workingDaysForPeriod / 10;
+            //if(totalDays < 730) 1ый метод
+            //else второй метод
+
+            return workingDaysForPeriod;
         }
-
     }
 }

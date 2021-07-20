@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TestCV.Interfaces;
 
 namespace TestCV
 {
@@ -14,6 +15,7 @@ namespace TestCV
             _employees = employees;
             _workLogs = workLogs;
         }
+
         public void AddEmployee(Employee employee) 
             => _employees.Add(employee);
 
@@ -24,6 +26,7 @@ namespace TestCV
                 _employees.Remove(emp);
         }
 
+        //Update
 
         public Employee GetEmployee(Guid id) 
             => _employees.Where(x => x.Id == id).FirstOrDefault();

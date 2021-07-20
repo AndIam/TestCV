@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using TestCV.Repositories;
 
 namespace TestCV
 {
@@ -15,19 +15,32 @@ namespace TestCV
                 EmploymentDate = DateTime.UtcNow.AddYears(-10)
             };
 
+            var listOfEmployees = new List<Employee>();
+            var listOfWorkLogs = new List<WorkLog>();
+
             var yesterday = DateTime.UtcNow.AddYears(-1);
             var vacationYesterday = new WorkLog
             {
                 EmployeeId = employee.Id,
                 Date = yesterday.Date,
-                WorkLogType = WorkLogType.Vacation
+                WorkLogType = WorkLogType.Work
             };
 
-            var repository = new EmployeeRepository(new[] { employee }, new[] { vacationYesterday });
-            var calculator = new VacationCalculator(repository);
+            listOfEmployees.Add(employee);
+            listOfWorkLogs.Add(vacationYesterday);
+
+            var repositoryOfEmployee = new EmployeeRepository(listOfEmployees, listOfWorkLogs);
+            var repositoryOfVacation = new VacationRepository(listOfEmployees, listOfWorkLogs);
+            
+            var calculator = new VacationCalculator(repositoryOfEmployee, repositoryOfVacation);
 
             var result = calculator.CalculateDay(employee.Id, employee.EmploymentDate, yesterday);
+
             Console.WriteLine("Count {0}", result);
+
+            var totalDays = repositoryOfVacation.CalculateTotalDays(employee.Id);
+
+            Console.WriteLine(totalDays);
 
         }
     }

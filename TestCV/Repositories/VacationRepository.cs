@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TestCV.Interfaces;
 
 namespace TestCV.Repositories
 {
-    public class VacationRepository : IVacationReository
+    public class VacationRepository : IVacationRepository
     {
         protected List<WorkLog> _workLogs;
-        public VacationRepository(List<WorkLog> workLogs)
-            => _workLogs = workLogs;
+        protected List<Employee> _employees;
+
+        public VacationRepository(List<Employee> employees, List<WorkLog> workLogs)
+        {
+            _workLogs = workLogs;
+            _employees = employees;
+        }
 
         public void AddEmployee(WorkLog workLog)
             => _workLogs.Add(workLog);
@@ -24,7 +28,7 @@ namespace TestCV.Repositories
 
         public int CountWorkLogByType(
             Guid employeeId,
-            DateTime beginDate,
+            DateTime EmploymentDate,
             DateTime calculationDate,
             WorkLogType type)
         {
@@ -32,8 +36,15 @@ namespace TestCV.Repositories
                 .Where(x =>
                     x.EmployeeId == employeeId
                     && x.WorkLogType == type
-                    && (x.Date >= beginDate || x.Date <= calculationDate))
+                    && (x.Date >= EmploymentDate || x.Date <= calculationDate))
                 .Count();
+        }
+
+        public double CalculateTotalDays(Guid id)
+        {
+            var emp = _employees.Where(x => x.Id == id).FirstOrDefault();
+            var date = DateTime.Now - emp.EmploymentDate;
+            return date.TotalDays;
         }
     }
 }

@@ -6,6 +6,6 @@ namespace TestCV
 {
     public interface IVacationDaysCalculator
     {
-        int CalculateDay(Guid employeeId, DateTime beginDate, DateTime endDate);
+        double CalculateDay(Guid employeeId, DateTime beginDate, DateTime endDate);
     }
 }

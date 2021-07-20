@@ -12,7 +12,7 @@ namespace TestCV
             {
                 Id = Guid.NewGuid(),
                 Name = "Andrew",
-                FirstDayOnTheWorking = DateTime.UtcNow.AddYears(-10)
+                EmploymentDate = DateTime.UtcNow.AddYears(-10)
             };
 
             var yesterday = DateTime.UtcNow.AddYears(-1);
@@ -26,7 +26,7 @@ namespace TestCV
             var repository = new EmployeeRepository(new[] { employee }, new[] { vacationYesterday });
             var calculator = new VacationCalculator(repository);
 
-            var result = calculator.CalculateDay(employee.Id, employee.FirstDayOnTheWorking, yesterday);
+            var result = calculator.CalculateDay(employee.Id, employee.EmploymentDate, yesterday);
             Console.WriteLine("Count {0}", result);
 
         }

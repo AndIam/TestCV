@@ -8,6 +8,6 @@ namespace TestCV
 
         public string Name { get; set; }
 
-        public DateTime FirstDayOnTheWorking { get; set; }
+        public DateTime EmploymentDate { get; set; }
     }
 }

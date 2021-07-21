@@ -9,6 +9,7 @@ namespace TestCV
         Work, // Рабочий 
         Vacation, //Отпуск
         Sick, // Больничный
-        Own // За свой счёт
+        Unpaid, // За свой счёт
+        DayOff // Выходной
     }
 }

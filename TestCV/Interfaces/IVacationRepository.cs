@@ -8,6 +8,8 @@ namespace TestCV.Interfaces
     {
         int CountWorkLogByType(Guid employee, DateTime beginDate, DateTime endDate, WorkLogType type);
 
-        double CalculateTotalDays(Guid employeeId);
+        int GetAccountingDaysByFullVacation { get; }
+
+        double GetTotalDays(Guid employeeId);
     }
 }

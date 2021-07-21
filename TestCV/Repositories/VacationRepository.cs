@@ -7,8 +7,12 @@ namespace TestCV.Repositories
 {
     public class VacationRepository : IVacationRepository
     {
+        private const int ACCOUNTING_DAYS_BY_FULL_VACATION = 730;
+
         protected List<WorkLog> _workLogs;
         protected List<Employee> _employees;
+
+        public int GetAccountingDaysByFullVacation => ACCOUNTING_DAYS_BY_FULL_VACATION;
 
         public VacationRepository(List<Employee> employees, List<WorkLog> workLogs)
         {
@@ -40,7 +44,7 @@ namespace TestCV.Repositories
                 .Count();
         }
 
-        public double CalculateTotalDays(Guid id)
+        public double GetTotalDays(Guid id)
         {
             var emp = _employees.Where(x => x.Id == id).FirstOrDefault();
             var date = DateTime.Now - emp.EmploymentDate;

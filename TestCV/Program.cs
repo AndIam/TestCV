@@ -34,11 +34,11 @@ namespace TestCV
             
             var calculator = new VacationCalculator(repositoryOfEmployee, repositoryOfVacation);
 
-            var result = calculator.CalculateDay(employee.Id, employee.EmploymentDate, yesterday);
+            var result = calculator.CalculateVacationDays(employee.Id, employee.EmploymentDate, yesterday);
 
             Console.WriteLine("Count {0}", result);
 
-            var totalDays = repositoryOfVacation.CalculateTotalDays(employee.Id);
+            var totalDays = repositoryOfVacation.GetTotalDays(employee.Id);
 
             Console.WriteLine(totalDays);
 

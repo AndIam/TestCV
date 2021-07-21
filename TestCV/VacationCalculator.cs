@@ -5,6 +5,9 @@ namespace TestCV
 {
     public class VacationCalculator : IVacationDaysCalculator
     {
+        const double COEFFICIENT_TO_FULL_VACATION = 0.07;
+        const double COEFFICIENT_TO_NOT_FULL_VACATION = 0.066;
+
         IEmployeeRepository _employeeRepository;
         IVacationRepository _vacationRepository;
 
@@ -14,24 +17,33 @@ namespace TestCV
             _vacationRepository = vacationReository;
         }
 
-        //public double CalculateDay(Guid employeeId, DateTime beginDate, DateTime calculationDate)
-        //{
-        //    var emp = _employeeRepository.GetEmployee(employeeId);
-        //    int workingDaysForPeriod = _vacationRepository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.Work);
+        private bool IsFullVacation(Guid employeeId)
+        {
+            var totalDaysInCompany = _vacationRepository.GetTotalDays(employeeId);
+            return totalDaysInCompany > _vacationRepository.GetAccountingDaysByFullVacation;
+        }
 
-        //    return workingDaysForPeriod;
-        //}
-
-        public double CalculateDay(Guid employeeId, DateTime beginDate, DateTime calculationDate)
+        private double CalculateDay(Guid employeeId, DateTime beginDate, DateTime calculationDate)
         {
             var emp = _employeeRepository.GetEmployee(employeeId);
-            var totalDays = _vacationRepository.CalculateTotalDays(employeeId);
             int workingDaysForPeriod = _vacationRepository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.Work);
+            int sickingDaysForPeriod = _vacationRepository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.Sick);
+            int ownDaysForPeriod = _vacationRepository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.Unpaid);
+            int dayOffDaysForPeriod = _vacationRepository.CountWorkLogByType(employeeId, emp.EmploymentDate, calculationDate, WorkLogType.DayOff);
 
-            //if(totalDays < 730) 1ый метод
-            //else второй метод
+            return workingDaysForPeriod + sickingDaysForPeriod - ownDaysForPeriod - dayOffDaysForPeriod;
+        }
 
-            return workingDaysForPeriod;
+        public double CalculateVacationDays(Guid employeeId, DateTime beginDate, DateTime calculationDate)
+        {
+            var calculateDays = CalculateDay(employeeId, beginDate, calculationDate);
+            if (IsFullVacation(employeeId))
+            {
+                return calculateDays * COEFFICIENT_TO_FULL_VACATION;
+            }
+
+            return calculateDays * COEFFICIENT_TO_NOT_FULL_VACATION;
+
         }
     }
 }
